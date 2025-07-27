@@ -2,10 +2,11 @@ import css from './App.module.css'
 import SearchBar from '../SearchBar/SearchBar'
 import toast, { Toaster } from 'react-hot-toast'
 import { fetchMovies } from '../../services/movieService'
-import type { MoviesResponse } from '../../types/movie'
+// import type { MoviesResponse } from '../../types/movie'
+import type { MoviesResponse } from '../../services/movieService'
 import MovieGrid from '../MovieGrid/MovieGrid'
 import type { Movie } from '../../types/movie'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Loader from '../Loader/Loader'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
@@ -29,17 +30,17 @@ export default function App() {
   });
   const totalPages = data?.total_pages || 1; // Use total_pages from the first movie or default to 1
 
+  useEffect(() =>{ if (isSuccess && data?.results.length === 0) {
+        toast.error('No movies found for your request.'); 
+      }}, [isSuccess, data])
   const handleSearch = (query: string) => {
-    try {
+    // try {
       setQuery(query); 
       setPage(1);
-      if (data?.results.length === 0) {
-        toast.error('No movies found for your request.'); 
-      }
-    } catch (error) {
-      console.error('Error fetching movies:', error);
-      toast.error('Failed to fetch movies. Please try again later.');
-    }
+    // } catch (error) {
+    //   console.error('Error fetching movies:', error);
+    //   toast.error('Failed to fetch movies. Please try again later.');
+    // }
   };
   return (
     <div className={css.app}>
